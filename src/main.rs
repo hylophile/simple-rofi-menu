@@ -16,7 +16,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut stdin = child.stdin.take().expect("Failed to open stdin");
 
-    let rofi_input = "1 - Toggle movie mode\n2 - Toggle virtual keyboard";
+    let rofi_input =
+        "0 - Exit\n1 - Toggle movie mode\n2 - Toggle virtual keyboard\n3 - Toggle zoom";
 
     std::thread::spawn(move || {
         stdin
@@ -32,6 +33,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let home = env::var("HOME")?;
 
     match choice {
+        "0" => {
+            println!("exit");
+        }
         "1" => {
             Command::new("sh")
                 .arg(format!("{home}/.config/waybar/scripts/toggle-dpms.sh"))
@@ -45,6 +49,11 @@ fn main() -> Result<(), Box<dyn Error>> {
             Command::new("sh")
                 .arg("-c")
                 .arg("kill -s 34 $(pidof wvkbd-mobintl)")
+                .spawn()?;
+        }
+        "3" => {
+            Command::new("sh")
+                .arg(format!("{home}/.config/waybar/scripts/toggle-big.sh"))
                 .spawn()?;
         }
         _ => unreachable!(),
