@@ -16,8 +16,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut stdin = child.stdin.take().expect("Failed to open stdin");
 
-    let rofi_input =
-        "0 - Exit\n1 - Toggle movie mode\n2 - Toggle virtual keyboard\n3 - Toggle zoom";
+    let rofi_input = "0 - Exit
+1 - Toggle movie mode
+2 - Toggle virtual keyboard
+3 - Toggle zoom
+4 - mpv
+5 - dolphin
+6 - firefox
+";
 
     std::thread::spawn(move || {
         stdin
@@ -55,6 +61,17 @@ fn main() -> Result<(), Box<dyn Error>> {
             Command::new("sh")
                 .arg(format!("{home}/.config/waybar/scripts/toggle-big.sh"))
                 .spawn()?;
+        }
+        "4" => {
+            Command::new("mpv")
+                .arg("--player-operation-mode=pseudo-gui")
+                .spawn()?;
+        }
+        "5" => {
+            Command::new("dolphin").spawn()?;
+        }
+        "6" => {
+            Command::new("firefox-nightly").spawn()?;
         }
         _ => unreachable!(),
     }
