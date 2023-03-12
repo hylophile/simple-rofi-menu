@@ -7,6 +7,7 @@ use std::process::{Command, Stdio};
 
 #[derive(Deserialize)]
 struct Config {
+    args: Vec<String>,
     entries: Vec<Entry>,
 }
 
@@ -52,10 +53,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("{}", rofi_input);
 
     let mut child = Command::new("rofi")
-        .arg("-dmenu")
-        .arg("-p")
-        .arg("")
-        .arg("-only-match")
+        .args(config.args)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .spawn()
